@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 )
 
 const allLetters = "abcdefghijklmnopqrstuvwxyz"
@@ -30,8 +31,9 @@ func main() {
 	var frequency = make([]int, 26)
 	for i := 1000; i <= 1030; i++ {
 		url := fmt.Sprintf("https://rfc-editor.org/rfc/rfc%d.txt", i)
-		countLetters(url, frequency)
+		go countLetters(url, frequency)
 	}
+	time.Sleep(10 * time.Second)
 	for i, c := range allLetters {
 		fmt.Printf("%c:-%d\n", c, frequency[i])
 	}
