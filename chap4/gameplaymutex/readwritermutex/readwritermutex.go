@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -23,7 +24,7 @@ func main() {
 func matchRecorder(matchEvents *[]string, mutex *sync.RWMutex) {
 	for i := 0; ; i++ {
 		mutex.Lock()
-		*matchEvents = append(*matchEvents, "Match Event "+string(i))
+		*matchEvents = append(*matchEvents, "Match Event "+strconv.Itoa(i))
 		mutex.Unlock()
 		time.Sleep(200 * time.Millisecond)
 		fmt.Println("Appended match event")
