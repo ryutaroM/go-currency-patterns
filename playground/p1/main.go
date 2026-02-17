@@ -11,8 +11,8 @@ func f() int {
 func main() {
 	ch := make(chan int, 1)
 	go func() {
+		ch <- f()
 		fmt.Println("go func called")
 	}()
-	ch <- f()
 	fmt.Println(<-ch)
 }
