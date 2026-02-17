@@ -10,6 +10,7 @@ func receiver(messages <-chan int) {
 		fmt.Println(time.Now().Format("15:04:05"), "Received:", msg)
 		time.Sleep(1 * time.Second)
 	}
+	fmt.Println("Receiver finished.")
 }
 
 func main() {
