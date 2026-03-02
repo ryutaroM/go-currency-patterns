@@ -1,0 +1,33 @@
+package main
+
+import (
+	"container/list"
+	"sync"
+
+	listing5_16 "github.com/cutajarj/ConcurrentProgrammingWithGo/chapter5/listing5.16"
+)
+
+type Channel[M any] struct {
+	capacitySema *listing5_16.Semaphore
+	sizeSema     *listing5_16.Semaphore
+	mutex        sync.Mutex
+	buffer       *list.List
+}
+
+func NewChannel[M any](capacity int) *Channel[M] {
+	return &Channel[M]{
+		capacitySema: listing5_16.NewSemaphore(capacity),
+		sizeSema:     listing5_16.NewSemaphore(0),
+		buffer:       list.New(),
+	}
+}
+
+func (c *Channel[M]) Send(message M) {
+	c.capacitySema.Acquire()
+
+	c.mutex.Lock()
+	c.buffer.PushBack(message)
+	c.mutex.Unlock()
+
+	c.sizeSema.Release()
+}
