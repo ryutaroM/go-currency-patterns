@@ -31,3 +31,15 @@ func (c *Channel[M]) Send(message M) {
 
 	c.sizeSema.Release()
 }
+
+func (c *Channel[M]) Receive() M {
+	c.capacitySema.Release()
+
+	c.sizeSema.Acquire()
+
+	c.mutex.Lock()
+	v := c.buffer.Remove(c.buffer.Front()).(M)
+	c.mutex.Unlock()
+
+	return v
+}
