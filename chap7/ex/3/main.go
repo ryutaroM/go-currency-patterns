@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 func findFactors(number int) []int {
 	result := make([]int, 0)
@@ -14,9 +17,12 @@ func findFactors(number int) []int {
 
 func main() {
 	resultCh := make(chan []int)
-	go func() {
-		resultCh <- findFactors(3419110721)
-	}()
-	fmt.Println(findFactors(4033836233))
-	fmt.Println(<-resultCh)
+	for i := 0; i < 10; i++ {
+		go func() {
+			resultCh <- findFactors(rand.Intn(1000000))
+		}()
+	}
+	for i := 0; i < 10; i++ {
+		fmt.Println(<-resultCh)
+	}
 }
