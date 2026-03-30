@@ -1,6 +1,10 @@
 package main
 
-import "math"
+import (
+	"fmt"
+	"math"
+	"math/rand"
+)
 
 func primesOnly(inputs <-chan int) <-chan int {
 	results := make(chan int)
@@ -19,4 +23,17 @@ func primesOnly(inputs <-chan int) <-chan int {
 		}
 	}()
 	return results
+}
+
+func main() {
+	numbersChannel := make(chan int)
+	primes := primesOnly(numbersChannel)
+	for i := 0; i < 100; {
+		select {
+		case numbersChannel <- rand.Intn(100000000) + 1:
+		case p := <-primes:
+			fmt.Println("Found prime:", p)
+			i++
+		}
+	}
 }
